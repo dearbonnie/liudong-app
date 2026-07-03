@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>流動</title>
+  <meta name="theme-color" content="#155e75">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="流動">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="./icon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <style>
+    :root{color-scheme:light;--bg:#f4f7f6;--surface:#fff;--ink:#172126;--muted:#64747b;--line:#d8e1e0;--primary:#155e75;--danger:#b42318;--shadow:0 14px 36px rgba(16,37,48,.1)}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,rgba(21,94,117,.13),rgba(244,247,246,0) 280px),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,select{font:inherit}.app{width:min(100%,520px);margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
+    .top{display:flex;justify-content:space-between;gap:16px;padding:8px 2px 18px}.eyebrow{margin:0 0 4px;color:var(--muted);font-size:13px;font-weight:700}h1,h2{margin:0;letter-spacing:0}h1{font-size:34px;line-height:1.08}h2{font-size:18px}.sync{margin:8px 0 0;color:var(--primary);font-size:13px;font-weight:800}
+    .icon,.primary,.secondary,.add,.edit,.delete{border:0;cursor:pointer}.icon{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:var(--surface);color:var(--primary);font-size:26px;font-weight:800;box-shadow:var(--shadow)}
+    .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.card,.panel{background:var(--surface);border:1px solid rgba(216,225,224,.8);box-shadow:var(--shadow);border-radius:8px}.card{min-height:92px;padding:16px}.card span{display:block;color:var(--muted);font-size:13px;font-weight:700}.card strong{display:block;margin-top:10px;font-size:24px;line-height:1.1}
+    .panel{padding:16px;margin-top:12px}.section{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.form,.filters{display:grid;gap:12px}label{display:grid;gap:7px;color:var(--muted);font-size:13px;font-weight:700}
+    input,select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:#fbfdfd;color:var(--ink);padding:0 12px;outline:none}input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,117,.14)}
+    .two,.filter,.actions,.backup{display:grid;grid-template-columns:1fr 1fr;gap:10px}.filter select{grid-column:1/-1}.newcat{display:grid;grid-template-columns:1fr 46px;gap:8px}.add{display:grid;place-items:center;width:46px;min-height:46px;border-radius:8px;background:#e6f1f2;color:var(--primary);font-size:28px;font-weight:800;line-height:1}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;max-width:100%;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:999px;background:#fbfdfd;color:var(--ink);font-size:13px;font-weight:800}.chip button{display:grid;place-items:center;width:24px;height:24px;border:0;border-radius:999px;background:#fff0ee;color:var(--danger);font-size:18px;line-height:1}
+    .primary{min-height:50px;border-radius:8px;background:var(--primary);color:white;font-size:16px;font-weight:800}.secondary{min-height:40px;border-radius:8px;background:#eef4f4;color:var(--primary);font-weight:800}.actions:has(#cancelEdit:not([hidden])){grid-template-columns:1fr 1fr}
+    .total{display:grid;gap:6px;min-height:78px;border:1px solid var(--line);border-radius:8px;padding:14px;background:#f8fbfb}.total span{color:var(--muted);font-size:13px;font-weight:800}.total strong{font-size:24px}
+    .list{display:grid;gap:10px;list-style:none;margin:14px 0 0;padding:0}.item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;min-height:78px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfdfd}.pill{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:rgba(183,121,31,.14);color:#765018;font-size:12px;font-weight:800}.title{display:block;margin-top:7px}.meta{display:block;margin-top:3px;color:var(--muted);font-size:13px}.side{display:grid;justify-items:end;gap:8px}.amount{font-size:17px}.item-actions{display:flex;gap:8px}.edit,.delete{display:grid;place-items:center;width:34px;height:34px;border-radius:8px}.edit{background:#e6f1f2;color:var(--primary);font-size:18px}.delete{background:#fff0ee;color:var(--danger);font-size:22px;line-height:1}
+    @media(max-width:360px){.summary,.two,.actions:has(#cancelEdit:not([hidden])),.backup,.filter,.newcat{grid-template-columns:1fr}.filter select{grid-column:auto}h1{font-size:30px}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top"><div><p class="eyebrow">生活固定開銷</p><h1>流動</h1><p class="sync" id="sync">準備同步</p></div><button class="icon" id="backup">↓</button></header>
+    <section class="summary"><article class="card"><span>本月支出</span><strong id="monthTotal">$0</strong></article><article class="card"><span>今年支出</span><strong id="yearTotal">$0</strong></article></section>
+    <section class="panel"><div class="section"><h2>新增記錄</h2></div><form id="form" class="form">
+      <label>項目<select id="category" required></select></label>
+      <div class="two"><label>金額<input id="amount" type="number" min="0" step="1" inputmode="numeric" required></label><label>日期<input id="date" type="date" required></label></div>
+      <span class="newcat"><input id="newCategory" type="text" placeholder="輸入新項目"><button class="add" id="addCategory" type="button">+</button></span>
+      <div class="chips" id="chips"></div>
+      <div class="actions"><button class="primary" id="save" type="submit">儲存記錄</button><button class="secondary" id="cancelEdit" type="button" hidden>取消編輯</button></div>
+    </form></section>
+    <section class="panel"><div class="section"><h2>查詢</h2><span id="count" class="eyebrow">0 筆</span></div><div class="filters"><div class="filter"><select id="filterCategory"><option value="">全部項目</option></select><input id="startDate" type="date" aria-label="開始日期"><input id="endDate" type="date" aria-label="結束日期"></div><article class="total"><span id="totalLabel">全部項目總計</span><strong id="total">$0</strong></article></div><ul id="list" class="list"></ul></section>
+    <section class="panel"><div class="section"><h2>資料備份</h2></div><div class="backup"><button class="secondary" id="exportCsv" type="button">匯出表格</button><button class="secondary" id="reload" type="button">重新同步</button></div></section>
+  </main>
+  <template id="itemTemplate"><li class="item"><div><span class="pill"></span><strong class="title"></strong><span class="meta"></span></div><div class="side"><strong class="amount"></strong><div class="item-actions"><button class="edit" type="button">✎</button><button class="delete" type="button">×</button></div></div></li></template>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwU1onBOaLRwIq1KrLogjyqmTCOf00viqe_byFAiXSJq8wqDp4Ciw8Ac4-kYHvtTJdYaw/exec";
+    const DEFAULT_CATEGORIES = ["水費","電費","所得稅","火險","房屋稅","地價稅","瓦斯費","管理費","樂","霖"];
+    const $ = (id) => document.getElementById(id);
+    const money = new Intl.NumberFormat("zh-TW",{style:"currency",currency:"TWD",maximumFractionDigits:0});
+    let records = [];
+    let categories = DEFAULT_CATEGORIES.map((name) => ({ id: crypto.randomUUID(), name }));
+    let editingId = null;
+    const today = () => new Date().toISOString().slice(0,10);
+    const month = () => today().slice(0,7);
+    const year = () => today().slice(0,4);
+    const status = (text) => $("sync").textContent = text;
+    function loadCloud() {
+      status("正在讀取雲端");
+      const callback = "liudong_" + Date.now();
+      const script = document.createElement("script");
+      window[callback] = (data) => {
+        apply(data);
+        status("已同步雲端");
+        delete window[callback];
+        script.remove();
+      };
+      script.onerror = () => {
+        status("雲端讀取失敗");
+        delete window[callback];
+        script.remove();
+      };
+      script.src = API_URL + "?callback=" + callback + "&_=" + Date.now();
+      document.body.append(script);
+    }
+    function postCloud(action, payload = {}) {
+      status("正在同步雲端");
+      return fetch(API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action, ...payload })
+      }).then(() => {
+        status("已送出同步");
+        setTimeout(loadCloud, 700);
+      }).catch(() => status("同步失敗"));
+    }
+    function apply(data) {
+      records = Array.isArray(data.records) ? data.records.map((r) => ({ id:String(r.id), category:String(r.category), amount:Number(r.amount), date:String(r.date) })) : [];
+      categories = Array.isArray(data.categories) && data.categories.length ? data.categories.map((c) => ({ id:String(c.id || crypto.randomUUID()), name:String(c.name || c) })) : categories;
+      fillCategories();
+      render();
+    }
+    function fillCategories() {
+      const selected = $("category").value;
+      const filtered = $("filterCategory").value;
+      $("category").replaceChildren();
+      $("filterCategory").replaceChildren(new Option("全部項目",""));
+      categories.forEach((cat) => {
+        $("category").append(new Option(cat.name, cat.name));
+        $("filterCategory").append(new Option(cat.name, cat.name));
+      });
+      $("category").value = categories.some((cat) => cat.name === selected) ? selected : categories[0]?.name || "";
+      $("filterCategory").value = categories.some((cat) => cat.name === filtered) ? filtered : "";
+      renderChips();
+    }
+    function renderChips() {
+      $("chips").replaceChildren();
+      categories.forEach((cat) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        const name = document.createElement("span");
+        name.textContent = cat.name;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "×";
+        button.onclick = () => deleteCategory(cat);
+        chip.append(name, button);
+        $("chips").append(chip);
+      });
+    }
+    function render() {
+      const cat = $("filterCategory").value;
+      const start = $("startDate").value;
+      const end = $("endDate").value;
+      const filtered = records.filter((r) => (!cat || r.category === cat) && (!start || r.date >= start) && (!end || r.date <= end)).sort((a,b) => b.date.localeCompare(a.date));
+      $("list").replaceChildren();
+      $("count").textContent = filtered.length + " 筆";
+      filtered.forEach((record) => {
+        const item = $("itemTemplate").content.firstElementChild.cloneNode(true);
+        item.querySelector(".pill").textContent = record.category;
+        item.querySelector(".title").textContent = record.category;
+        item.querySelector(".meta").textContent = record.date;
+        item.querySelector(".amount").textContent = money.format(record.amount);
+        item.querySelector(".edit").onclick = () => editRecord(record);
+        item.querySelector(".delete").onclick = () => deleteRecord(record);
+        $("list").append(item);
+      });
+      $("monthTotal").textContent = money.format(records.filter((r) => r.date.startsWith(month())).reduce((sum,r) => sum + r.amount, 0));
+      $("yearTotal").textContent = money.format(records.filter((r) => r.date.startsWith(year())).reduce((sum,r) => sum + r.amount, 0));
+      $("total").textContent = money.format(filtered.reduce((sum,r) => sum + r.amount, 0));
+      $("totalLabel").textContent = (start || end ? (start || "最早") + " 至 " + (end || "今天") + " " : "") + (cat || "全部項目") + "總計";
+    }
+    function resetForm() {
+      $("form").reset();
+      $("date").value = today();
+      $("category").value = categories[0]?.name || "";
+      editingId = null;
+      $("save").textContent = "儲存記錄";
+      $("cancelEdit").hidden = true;
+    }
+    function saveRecord(event) {
+      event.preventDefault();
+      const amount = Number($("amount").value);
+      if (!Number.isFinite(amount) || amount <= 0) return;
+      const record = { id: editingId || crypto.randomUUID(), category: $("category").value, amount, date: $("date").value };
+      postCloud("upsertRecord", { record }).then(resetForm);
+    }
+    function editRecord(record) {
+      editingId = record.id;
+      $("category").value = record.category;
+      $("amount").value = record.amount;
+      $("date").value = record.date;
+      $("save").textContent = "更新記錄";
+      $("cancelEdit").hidden = false;
+      $("amount").focus();
+    }
+    function deleteRecord(record) {
+      postCloud("deleteRecord", { id: record.id });
+      if (editingId === record.id) resetForm();
+    }
+    function addCategory() {
+      const name = $("newCategory").value.trim();
+      if (!name) return;
+      $("newCategory").value = "";
+      postCloud("upsertCategory", { category: { id: crypto.randomUUID(), name } });
+      $("category").value = name;
+    }
+    function deleteCategory(cat) {
+      postCloud("deleteCategory", { id: cat.id, name: cat.name });
+    }
+    function exportCsv() {
+      const rows = [["日期","項目","金額"], ...records.sort((a,b) => a.date.localeCompare(b.date)).map((r) => [r.date,r.category,r.amount])];
+      const csv = rows.map((row) => row.map((cell) => '"' + String(cell).replaceAll('"','""') + '"').join(",")).join("\\n");
+      const url = URL.createObjectURL(new Blob(["\\uFEFF" + csv], { type:"text/csv;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "流動-" + today() + ".csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+    $("form").addEventListener("submit", saveRecord);
+    $("addCategory").addEventListener("click", addCategory);
+    $("newCategory").addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); addCategory(); } });
+    $("cancelEdit").addEventListener("click", resetForm);
+    $("filterCategory").addEventListener("change", render);
+    $("startDate").addEventListener("change", render);
+    $("endDate").addEventListener("change", render);
+    $("exportCsv").addEventListener("click", exportCsv);
+    $("reload").addEventListener("click", loadCloud);
+    $("backup").addEventListener("click", exportCsv);
+    $("date").value = today();
+    fillCategories();
+    loadCloud();
+  </script>
+</body>
+</html>

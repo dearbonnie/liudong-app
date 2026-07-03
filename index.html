@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
   <title>流動</title>
   <meta name="theme-color" content="#155e75">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,19 +12,20 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <style>
     :root{color-scheme:light;--bg:#f4f7f6;--surface:#fff;--ink:#172126;--muted:#64747b;--line:#d8e1e0;--primary:#155e75;--danger:#b42318;--shadow:0 14px 36px rgba(16,37,48,.1)}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,rgba(21,94,117,.13),rgba(244,247,246,0) 280px),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    button,input,select{font:inherit}.app{width:min(100%,520px);margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
+    *{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;background:linear-gradient(180deg,rgba(21,94,117,.13),rgba(244,247,246,0) 280px),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,select{font:inherit;font-size:16px}.app{width:100%;max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));overflow:hidden}
     .top{display:flex;justify-content:space-between;gap:16px;padding:8px 2px 18px}.eyebrow{margin:0 0 4px;color:var(--muted);font-size:13px;font-weight:700}h1,h2{margin:0;letter-spacing:0}h1{font-size:34px;line-height:1.08}h2{font-size:18px}.sync{margin:8px 0 0;color:var(--primary);font-size:13px;font-weight:800}
     .icon,.primary,.secondary,.add,.edit,.delete{border:0;cursor:pointer}.icon{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:var(--surface);color:var(--primary);font-size:26px;font-weight:800;box-shadow:var(--shadow)}
     .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.card,.panel{background:var(--surface);border:1px solid rgba(216,225,224,.8);box-shadow:var(--shadow);border-radius:8px}.card{min-height:92px;padding:16px}.card span{display:block;color:var(--muted);font-size:13px;font-weight:700}.card strong{display:block;margin-top:10px;font-size:24px;line-height:1.1}
     .panel{padding:16px;margin-top:12px}.section{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.form,.filters{display:grid;gap:12px}label{display:grid;gap:7px;color:var(--muted);font-size:13px;font-weight:700}
-    input,select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:#fbfdfd;color:var(--ink);padding:0 12px;outline:none}input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,117,.14)}
-    .two,.filter,.actions,.backup{display:grid;grid-template-columns:1fr 1fr;gap:10px}.filter select{grid-column:1/-1}.newcat{display:grid;grid-template-columns:1fr 46px;gap:8px}.add{display:grid;place-items:center;width:46px;min-height:46px;border-radius:8px;background:#e6f1f2;color:var(--primary);font-size:28px;font-weight:800;line-height:1}
+    input,select{width:100%;min-width:0;max-width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:#fbfdfd;color:var(--ink);padding:0 12px;outline:none}input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,117,.14)}
+    .two,.filter,.actions,.backup{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.filter select{grid-column:1/-1}.newcat{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px}.add{display:grid;place-items:center;width:46px;min-height:46px;border-radius:8px;background:#e6f1f2;color:var(--primary);font-size:28px;font-weight:800;line-height:1}
     .chips{display:flex;flex-wrap:wrap;gap:8px}.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;max-width:100%;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:999px;background:#fbfdfd;color:var(--ink);font-size:13px;font-weight:800}.chip button{display:grid;place-items:center;width:24px;height:24px;border:0;border-radius:999px;background:#fff0ee;color:var(--danger);font-size:18px;line-height:1}
     .primary{min-height:50px;border-radius:8px;background:var(--primary);color:white;font-size:16px;font-weight:800}.secondary{min-height:40px;border-radius:8px;background:#eef4f4;color:var(--primary);font-weight:800}.actions:has(#cancelEdit:not([hidden])){grid-template-columns:1fr 1fr}
     .total{display:grid;gap:6px;min-height:78px;border:1px solid var(--line);border-radius:8px;padding:14px;background:#f8fbfb}.total span{color:var(--muted);font-size:13px;font-weight:800}.total strong{font-size:24px}
-    .list{display:grid;gap:10px;list-style:none;margin:14px 0 0;padding:0}.item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;min-height:78px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfdfd}.pill{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:rgba(183,121,31,.14);color:#765018;font-size:12px;font-weight:800}.title{display:block;margin-top:7px}.meta{display:block;margin-top:3px;color:var(--muted);font-size:13px}.side{display:grid;justify-items:end;gap:8px}.amount{font-size:17px}.item-actions{display:flex;gap:8px}.edit,.delete{display:grid;place-items:center;width:34px;height:34px;border-radius:8px}.edit{background:#e6f1f2;color:var(--primary);font-size:18px}.delete{background:#fff0ee;color:var(--danger);font-size:22px;line-height:1}
-    @media(max-width:360px){.summary,.two,.actions:has(#cancelEdit:not([hidden])),.backup,.filter,.newcat{grid-template-columns:1fr}.filter select{grid-column:auto}h1{font-size:30px}}
+    .list{display:grid;gap:10px;list-style:none;margin:14px 0 0;padding:0}.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:78px;border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfdfd}.pill{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:rgba(183,121,31,.14);color:#765018;font-size:12px;font-weight:800}.title{display:block;margin-top:7px}.meta{display:block;margin-top:3px;color:var(--muted);font-size:13px}.side{display:grid;justify-items:end;gap:8px}.amount{font-size:17px}.item-actions{display:flex;gap:8px}.edit,.delete{display:grid;place-items:center;width:34px;height:34px;border-radius:8px}.edit{background:#e6f1f2;color:var(--primary);font-size:18px}.delete{background:#fff0ee;color:var(--danger);font-size:22px;line-height:1}
+    @media(max-width:430px){.filter{grid-template-columns:1fr}.filter select{grid-column:auto}}
+    @media(max-width:360px){.summary,.two,.actions:has(#cancelEdit:not([hidden])),.backup,.newcat{grid-template-columns:1fr}h1{font-size:30px}}
   </style>
 </head>
 <body>
@@ -53,6 +54,7 @@
     const today = () => new Date().toISOString().slice(0,10);
     const month = () => today().slice(0,7);
     const year = () => today().slice(0,4);
+    const yearStart = () => year() + "-01-01";
     const status = (text) => $("sync").textContent = text;
     function loadCloud() {
       status("正在讀取雲端");
@@ -83,6 +85,29 @@
         status("已送出同步");
         setTimeout(loadCloud, 700);
       }).catch(() => status("同步失敗"));
+    }
+    function upsertLocalRecord(record) {
+      const index = records.findIndex((item) => item.id === record.id);
+      const cleanRecord = { id: String(record.id), category: String(record.category), amount: Number(record.amount), date: String(record.date) };
+      if (index >= 0) {
+        records[index] = cleanRecord;
+      } else {
+        records.push(cleanRecord);
+      }
+      render();
+    }
+    function removeLocalRecord(id) {
+      records = records.filter((item) => item.id !== id);
+      render();
+    }
+    function upsertLocalCategory(category) {
+      if (categories.some((item) => item.name === category.name)) return;
+      categories.push({ id: String(category.id), name: String(category.name) });
+      fillCategories();
+    }
+    function removeLocalCategory(cat) {
+      categories = categories.filter((item) => item.id !== cat.id && item.name !== cat.name);
+      fillCategories();
     }
     function apply(data) {
       records = Array.isArray(data.records) ? data.records.map((r) => ({ id:String(r.id), category:String(r.category), amount:Number(r.amount), date:String(r.date) })) : [];
@@ -153,6 +178,8 @@
       const amount = Number($("amount").value);
       if (!Number.isFinite(amount) || amount <= 0) return;
       const record = { id: editingId || crypto.randomUUID(), category: $("category").value, amount, date: $("date").value };
+      upsertLocalRecord(record);
+      status("已儲存，正在同步雲端");
       postCloud("upsertRecord", { record }).then(resetForm);
     }
     function editRecord(record) {
@@ -165,6 +192,7 @@
       $("amount").focus();
     }
     function deleteRecord(record) {
+      removeLocalRecord(record.id);
       postCloud("deleteRecord", { id: record.id });
       if (editingId === record.id) resetForm();
     }
@@ -172,10 +200,13 @@
       const name = $("newCategory").value.trim();
       if (!name) return;
       $("newCategory").value = "";
-      postCloud("upsertCategory", { category: { id: crypto.randomUUID(), name } });
+      const category = { id: crypto.randomUUID(), name };
+      upsertLocalCategory(category);
+      postCloud("upsertCategory", { category });
       $("category").value = name;
     }
     function deleteCategory(cat) {
+      removeLocalCategory(cat);
       postCloud("deleteCategory", { id: cat.id, name: cat.name });
     }
     function exportCsv() {
@@ -199,6 +230,8 @@
     $("reload").addEventListener("click", loadCloud);
     $("backup").addEventListener("click", exportCsv);
     $("date").value = today();
+    $("startDate").value = yearStart();
+    $("endDate").value = today();
     fillCategories();
     loadCloud();
   </script>
